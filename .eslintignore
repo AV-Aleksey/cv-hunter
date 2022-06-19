@@ -1,0 +1,7 @@
+/src/components_deprecated/*
+/src/entities_deprecated/*
+/src/pages_deprecated/*
+/src/mocks_deprecated/*
+/src/vendor/*
+/configs
+/babel.config.js

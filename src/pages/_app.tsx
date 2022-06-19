@@ -1,13 +1,8 @@
-import { RootStoreProvider } from "../providers/RootStoreProvider";
-import { NextPage } from "next";
+import { NextPage } from 'next';
+import { ReactElement } from 'react';
+import { RootStoreProvider } from '../providers/RootStoreProvider';
 
-function MyApp({
-   Component,
-   pageProps,
-}: {
-    Component: NextPage;
-    pageProps: any;
-}) {
+function MyApp({ Component, pageProps }: { Component: NextPage; pageProps: any }): ReactElement {
     return (
         <RootStoreProvider hydrationData={pageProps.hydrationData}>
             <Component {...pageProps} />
