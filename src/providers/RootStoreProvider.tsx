@@ -1,34 +1,32 @@
-import { enableStaticRendering } from "mobx-react-lite";
-import React, { createContext, ReactNode, useContext } from "react";
-import { RootStore, RootStoreHydration } from "../stores/RootStore/RootStore";
+import { enableStaticRendering } from 'mobx-react-lite';
+import React, { createContext, FC, ReactNode, useContext } from 'react';
+import { RootStore, RootStoreHydration } from '../stores/RootStore/RootStore';
 
-enableStaticRendering(typeof window === "undefined");
+enableStaticRendering(typeof window === 'undefined');
 
 let store: RootStore;
 const StoreContext = createContext<RootStore | undefined>(undefined);
-StoreContext.displayName = "StoreContext";
+StoreContext.displayName = 'StoreContext';
 
-export function useRootStore() {
+export function useRootStore(): RootStore {
     const context = useContext(StoreContext);
     if (context === undefined) {
-        throw new Error("useRootStore must be used within RootStoreProvider");
+        throw new Error('useRootStore must be used within RootStoreProvider');
     }
 
     return context;
 }
 
 export function RootStoreProvider({
-  children,
-  hydrationData,
+    children,
+    hydrationData,
 }: {
     children: ReactNode;
     hydrationData?: RootStoreHydration;
-}) {
-    const store = initializeStore(hydrationData);
+}): ReturnType<FC> {
+    const initialStore = initializeStore(hydrationData);
 
-    return (
-        <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
-    );
+    return <StoreContext.Provider value={initialStore}>{children}</StoreContext.Provider>;
 }
 
 function initializeStore(initialData?: RootStoreHydration): RootStore {
@@ -38,9 +36,13 @@ function initializeStore(initialData?: RootStoreHydration): RootStore {
         _store.hydrate(initialData);
     }
     // For SSG and SSR always create a new store
-    if (typeof window === "undefined") return _store;
+    if (typeof window === 'undefined') {
+        return _store;
+    }
     // Create the store once in the client
-    if (!store) store = _store;
+    if (!store) {
+        store = _store;
+    }
 
     return _store;
 }
